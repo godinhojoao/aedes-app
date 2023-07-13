@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { complaintStatusesManager } from '../../shared/complaintStatusesManager';
+import { complaintSchema } from '../../validations/complaintSchema';
+import { ErrorModal } from '../ErrorModal';
 
 import styles from './styles';
-import { complaintStatusesManager } from '../../shared/complaintStatusesManager';
 
 export const ComplaintForm = ({ complaint, handleSave }) => {
+  const [validationErrors, setValidationErrors] = useState([])
   const [formData, setFormData] = useState(complaint || {
     status: 'WAITING',
     location: {
@@ -15,7 +18,7 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
       state: '',
       street: '',
     },
-    denunciatorId: 'current-user-id',
+    denunciatorId: 'current-user-id', // get from auth context or some storage maybe
     description: '',
   });
 
@@ -34,8 +37,17 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
     }
   };
 
-  function onSave() {
-    handleSave(formData)
+  async function onSave() {
+    try {
+      await complaintSchema.validate(formData, { abortEarly: false });
+      handleSave(formData);
+    } catch (error) {
+      const validationErrors = {};
+      error.inner.forEach((err) => {
+        validationErrors[err.path] = err.message;
+      });
+      setValidationErrors(validationErrors);
+    }
   }
 
   return (
@@ -110,6 +122,15 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
       <TouchableOpacity style={styles.saveButton} onPress={onSave}>
         <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
+
+      {validationErrors && validationErrors.length > 0 && (
+        validationErrors[0]
+      )}
+      <ErrorModal
+        visible={Object.keys(validationErrors).length > 0}
+        errors={validationErrors}
+        onClose={() => setValidationErrors({})}
+      />
     </View>
   );
 };
