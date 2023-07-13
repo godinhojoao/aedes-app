@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
-import { complaintStatusesManager } from '../../shared/complaintStatusesManager';
+import { complaintStatusesManager } from '../../shared/ComplaintStatusesManager';
 import { complaintSchema } from '../../validations/complaintSchema';
 import { ErrorModal } from '../ErrorModal';
 
@@ -123,9 +123,6 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
         <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
 
-      {validationErrors && validationErrors.length > 0 && (
-        validationErrors[0]
-      )}
       <ErrorModal
         visible={Object.keys(validationErrors).length > 0}
         errors={validationErrors}

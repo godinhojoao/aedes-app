@@ -1,15 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { FlatList, SafeAreaView } from 'react-native';
 import { ComplaintModal } from '../../core/components/ComplaintModal';
-
-import { Complaints } from '../../core/context/Complaints';
 import { Item } from '../../core/components/Item/index';
 import styles from './styles';
-import { complaintStatusesManager } from '../../core/shared/complaintStatusesManager';
 
 export const AllComplaints = () => {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
-  // const { complaints } = useContext(ComplaintsContext);
   const complaints = [
     {
       id: 'dale1',
