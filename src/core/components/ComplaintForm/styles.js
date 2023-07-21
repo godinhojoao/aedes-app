@@ -1,6 +1,9 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+  },
   modalContainer: {
     backgroundColor: 'white',
     padding: 20,
@@ -12,8 +15,9 @@ export default StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
-    borderRadius: 8,
-    marginTop: 2
+    borderRadius: 4,
+    marginTop: 2,
+    borderColor: '#0842a0ff'
   },
   sectionContainer: {
     marginTop: 10,

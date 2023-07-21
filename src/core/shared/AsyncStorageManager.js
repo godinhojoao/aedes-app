@@ -1,17 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// how to use
-// await AsyncStorageManager.removeItem("aedes-token");
-// const token = await AsyncStorageManager.getItem("aedes-token");
-// const account = await AsyncStorageManager.getItem("aedes-account", true);
-// await AsyncStorageManager.setItem("aedes-token", "1234567890");
-// await AsyncStorageManager.setItem("aedes-account", {
-//   id: '29bb453d-db2f-4595-ac50-8ec3330b4086',
-//   name: 'test',
-//   email: 'test@gmail.com',
-//   cpf: '91293252000',
-//   role: 'USER',
-// });
 export class AsyncStorageManager {
   static async setItem(key, value) {
     try {

@@ -17,7 +17,8 @@ export default StyleSheet.create({
     borderRadius: 8
   },
   itemTitle: {
-    fontSize: 20
+    fontSize: 20,
+    marginBottom: 4,
   },
   itemSubtitle: {
     fontSize: 16,

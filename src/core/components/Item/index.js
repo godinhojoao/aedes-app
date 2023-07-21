@@ -9,7 +9,12 @@ export const Item = ({ item, onPress, isSelected }) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor }]}>
       <View>
-        <Text style={[styles.itemTitle, { color: '#fff' }]}>{item.description}</Text>
+        <Text
+          style={[styles.itemTitle, { color: '#fff' }]}
+          numberOfLines={5}
+          ellipsizeMode="tail">
+          {item.description}
+        </Text>
         <Text style={[styles.itemSubtitle, { color: '#fff' }]}>
           {item.location.city} -  {item.location.street}, {item.location.number}
         </Text>

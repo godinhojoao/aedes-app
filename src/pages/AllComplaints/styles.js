@@ -5,4 +5,7 @@ export default StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
   },
+  noComplaintsContainer: {
+    alignSelf: 'center'
+  }
 });

@@ -28,6 +28,8 @@ $ npm install
 ```
 
 ## Running the app
+- Configure your `env.json` file.
+
 ```bash
 # start
 $ npm run start

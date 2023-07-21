@@ -1,29 +1,38 @@
-import React, { useState } from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { FlatList, SafeAreaView, View, Text } from 'react-native';
 import { ComplaintModal } from '../../core/components/ComplaintModal';
 import { Item } from '../../core/components/Item/index';
 import styles from './styles';
+import { FIND_ALL_COMPLAINTS_QUERY } from '../../core/graphql/queries';
+import { useQuery } from '@apollo/client';
+import { AuthContext } from '../../core/context/AuthContext';
+import { ErrorModal } from '../../core/components/ErrorModal';
 
 export const AllComplaints = () => {
+  const { token, account, logout } = useContext(AuthContext);
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const complaints = [
-    {
-      id: 'dale1',
-      status: 'WAITING',
-      location: {
-        cep: '12345-321',
-        city: 'Bagé',
-        neighborhood: 'Test neighborhood',
-        number: '1000',
-        state: 'RS',
-        street: 'Test street',
+  const [complaints, setComplaints] = useState([]);
+  const { refetch } = useQuery(FIND_ALL_COMPLAINTS_QUERY, {
+    variables: {
+      input: {
+        limit: 999,
+        offset: 0,
+        // denunciatorId: account && account.id
       },
-      denunciatorId: '4152d669-a9a1-49d0-bfdf-9d58040fcfb7',
-      description: 'Test complaint',
-    }
-  ]
+    },
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+    onCompleted: (data) => {
+      setComplaints(data.findAllComplaints.items);
+    },
+    onError: () => setIsErrorModalVisible(true),
+  });
 
-  const closeModal = () => {
+  function closeModal() {
     setSelectedComplaint(null)
   };
 
@@ -31,7 +40,7 @@ export const AllComplaints = () => {
     setSelectedComplaint(complaint);
   }
 
-  const renderItem = ({ item }) => {
+  function renderItem({ item }) {
     return (
       <Item
         item={item}
@@ -43,13 +52,26 @@ export const AllComplaints = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={complaints}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedComplaint ? selectedComplaint.id : null}
+      {complaints.length ?
+        <FlatList
+          data={complaints}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          extraData={selectedComplaint ? selectedComplaint.id : null}
+        />
+        :
+        <View style={styles.noComplaintsContainer}>
+          <Text>Você não realizou nenhuma denúncia ainda.</Text>
+        </View>
+      }
+      {selectedComplaint && <ComplaintModal closeModal={closeModal} selectedComplaint={selectedComplaint} />}
+      <ErrorModal
+        visible={isErrorModalVisible}
+        onClose={() => {
+          setIsErrorModalVisible(false);
+          logout();
+        }}
       />
-      <ComplaintModal closeModal={closeModal} selectedComplaint={selectedComplaint} />
     </SafeAreaView>
   );
 };
