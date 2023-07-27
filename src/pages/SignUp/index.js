@@ -7,7 +7,7 @@ import { inputStyles } from '../../core/styles/input';
 import { useMutation } from '@apollo/client';
 import { CREATE_ACCOUNT } from '../../core/graphql/mutations';
 
-export const SignUp = () => {
+export const SignUp = ({ navigation }) => {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export const SignUp = () => {
         setCpf('');
         setPassword('');
         setEmail('');
-        // navigate to login here
+        navigation.navigate('Entrar');
       },
     }
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, View, Text } from 'react-native';
 import { ComplaintModal } from '../../core/components/ComplaintModal';
 import { Item } from '../../core/components/Item/index';
@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client';
 import { AuthContext } from '../../core/context/AuthContext';
 import { ErrorModal } from '../../core/components/ErrorModal';
 
-export const AllComplaints = () => {
+export const AllComplaints = ({ route, navigation }) => {
   const { token, account, logout } = useContext(AuthContext);
   const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
@@ -18,7 +18,7 @@ export const AllComplaints = () => {
       input: {
         limit: 999,
         offset: 0,
-        // denunciatorId: account && account.id
+        denunciatorId: account && account.id
       },
     },
     context: {
@@ -31,6 +31,25 @@ export const AllComplaints = () => {
     },
     onError: () => setIsErrorModalVisible(true),
   });
+
+  useEffect(() => {
+    if (!selectedComplaint) {
+      refetch();
+    }
+  }, [selectedComplaint])
+
+  useEffect(() => {
+    const onFocus = () => {
+      refetch();
+    };
+
+    const unsubscribeFocus = navigation.addListener('focus', onFocus);
+
+    return () => {
+      unsubscribeFocus();
+    };
+  }, [navigation, route]);
+
 
   function closeModal() {
     setSelectedComplaint(null)

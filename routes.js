@@ -15,14 +15,14 @@ export function Routes() {
 
   useEffect(() => {
     (async () => {
-      const token = await AsyncStorageManager.getItem("aedes-token");
-      const account = await AsyncStorageManager.getItem("aedes-account", true);
-      const hasAuthCredentials = !!token && !!account;
+      const currentToken = await AsyncStorageManager.getItem("aedes-token");
+      const currentAccount = await AsyncStorageManager.getItem("aedes-account", true);
+      const hasAuthCredentials = !!currentToken && !!currentAccount;
       setIsAuthenticated(hasAuthCredentials);
-      setToken(token);
-      setAccount(account);
+      setToken(currentToken);
+      setAccount(currentAccount);
     })()
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <NavigationContainer>

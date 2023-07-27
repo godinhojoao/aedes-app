@@ -7,11 +7,12 @@ import { ErrorModal } from '../ErrorModal';
 import styles from './styles';
 import { inputStyles } from '../../styles/input';
 import { AuthContext } from '../../context/AuthContext';
+import { formatCEP } from '../../shared/formatCEP';
+
 
 export const ComplaintForm = ({ complaint, handleSave }) => {
-  const { account } = useContext(AuthContext);
-  const [validationErrors, setValidationErrors] = useState([])
-  const [formData, setFormData] = useState(complaint || {
+  const { account, token } = useContext(AuthContext);
+  const defaultComplaintData = {
     status: 'WAITING',
     location: {
       cep: '',
@@ -23,7 +24,9 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
     },
     denunciatorId: account && account.id,
     description: '',
-  });
+  };
+  const [validationErrors, setValidationErrors] = useState([]);
+  const [formData, setFormData] = useState(complaint || defaultComplaintData);
 
   const handleInputChange = (key, value) => {
     if (key.startsWith('location.')) {
@@ -46,8 +49,8 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
       if (formData && formData.location && formData.location.cep) {
         formData.location.cep = formData.location.cep.replace(/\D/g, '');
       }
-      formData.location.cep = formData.location.cep.replace(/\D/g, '');
-      handleSave(formData);
+      await handleSave(formData, token);
+      setFormData(defaultComplaintData);
     } catch (error) {
       const validationErrors = {};
       error.inner.forEach((err) => {
@@ -97,7 +100,10 @@ export const ComplaintForm = ({ complaint, handleSave }) => {
           <TextInput
             style={styles.input}
             value={formData.location.cep}
-            onChangeText={(value) => handleInputChange('location.cep', value)}
+            onChangeText={(value) => {
+              const formattedCEP = formatCEP(value);
+              handleInputChange('location.cep', formattedCEP);
+            }}
           />
 
           <Text style={inputStyles.label}>Cidade</Text>

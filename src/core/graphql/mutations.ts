@@ -52,3 +52,30 @@ export const UPDATE_COMPLAINT = gql`
     }
   }
 `;
+
+export const CREATE_COMPLAINT = gql`
+ mutation createComplaint ($input: CreateComplaintInputDto!) {
+    createComplaint (input: $input) {
+      id
+      status
+      description
+      solverDescription
+      denunciatorId
+      location {
+        id
+        city
+        state
+        street
+        neighborhood
+        cep
+        number
+      }
+      solver {
+        id
+        name
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
