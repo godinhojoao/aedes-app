@@ -19,6 +19,18 @@ export default StyleSheet.create({
     marginTop: 2,
     borderColor: '#0842a0ff'
   },
+  pickerContainer: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 4,
+    marginBottom: 10,
+    overflow: 'hidden',
+    borderColor: '#0842a0ff'
+  },
+  picker: {
+    color: 'black',
+    paddingVertical: 12,
+  },
   sectionContainer: {
     marginTop: 10,
   },

@@ -22,5 +22,16 @@ export default StyleSheet.create({
   },
   itemSubtitle: {
     fontSize: 16,
-  }
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  statusBullet: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    marginRight: 8,
+  },
 });
